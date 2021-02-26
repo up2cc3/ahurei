@@ -1,8 +1,10 @@
 const db = require("../models");
-const databases = require("../config/db.config.js");
-const Order = db.production_orders;
+//const databases = require("../config/db.config.js");
+const Productionorder = db.productionorder;
+const Salesorder = db.salesorder;
+const Salesorderitem = db.salesorderitem;
 const Op = db.Sequelize.Op;
-const magento = databases.magento
+//const magento = databases.magento
 exports.create = (req, res) => {
   const order = {
     status: req.body.status,
@@ -25,20 +27,57 @@ exports.create = (req, res) => {
 
 
 exports.findAll = (req, res) => {
-  const status = req.query.status;
-  var condition = status ? { status: { [Op.like]: `%${status}%` } } : null;
-/*
-const sequelize = require('db_config');
-function test(req, res){
-  const qry = `SELECT * FROM db1.affiliates_order co
-LEFT JOIN db2.affiliates m ON m.id = co.campaign_id`;
-  sequelize.query(qry, null, {  raw: true}).then(result=>{
-    console.log(result);
-  })
-}
-*/
+  // const status = req.query.status;
+  //  var condition = status ? { status: { [Op.like]: `%${status}%` } } : null;
 
-  Order.findAll({ where: condition })
+
+  Productionorder.findAll()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+};
+exports.findAllSO = (req, res) => {
+  // const status = req.query.status;
+  //  var condition = status ? { status: { [Op.like]: `%${status}%` } } : null;
+
+  /*const sequelize = require('../config/db.config.js');
+
+   const qry = `SELECT so.entity_id,so.state,soi.product_type,soi.sku FROM databases.magento.sales_order so
+ LEFT JOIN databases.magento.sales_order_item soi ON so.entity_id = soi.order.id`;
+   sequelize.query(qry, null, { raw: true }).then(result => {
+     console.log(result);
+   })
+ */
+  Salesorder.findAll()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving tutorials."
+      });
+    });
+};
+exports.findAllSOI = (req, res) => {
+  // const status = req.query.status;
+  //  var condition = status ? { status: { [Op.like]: `%${status}%` } } : null;
+
+  /*const sequelize = require('../config/db.config.js');
+
+   const qry = `SELECT so.entity_id,so.state,soi.product_type,soi.sku FROM databases.magento.sales_order so
+ LEFT JOIN databases.magento.sales_order_item soi ON so.entity_id = soi.order.id`;
+   sequelize.query(qry, null, { raw: true }).then(result => {
+     console.log(result);
+   })
+ */
+  Salesorderitem.findAll()
     .then(data => {
       res.send(data);
     })
@@ -88,6 +127,23 @@ exports.update = (req, res) => {
     });
 };
 
+exports.query = (req, res) => {
+  const { QueryTypes } = require('sequelize');
+  const qry = `SELECT so.entity_id,so.state,so.increment_id,soi.product_type,soi.sku FROM sales_order so
+ LEFT JOIN sales_order_item soi ON soi.order_id=so.entity_id `;
+  db.sequelizemagento.query(qry, { type: QueryTypes.SELECT }).then(result => {
+    res.send(result)
+  })
+
+};
+exports.queryproduction = (req, res) => {
+  const { QueryTypes } = require('sequelize');
+  const qry = `SELECT so.increment_id,soi.product_type,soi.sku,po.status,po.designed,po.packaged,po.comments FROM ahurei.production_orders po RIGHT JOIN magento.sales_order_item soi ON soi.item_id=po.item_id RIGHT JOIN magento.sales_order so ON so.entity_id=soi.order_id`;
+  db.sequelizeproduction.query(qry, { type: QueryTypes.SELECT }).then(result => {
+    res.send(result)
+  })
+
+};
 exports.delete = (req, res) => {
 
 };

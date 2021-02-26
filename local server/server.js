@@ -19,7 +19,9 @@ app.get("/", (req, res) => {
 });
 
 const db = require("./app/models");
-//db.sequelize.sync();
+/*db.sequelizeproduction.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
+});*/
 require("./app/routes/order.routes")(app);
 const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {

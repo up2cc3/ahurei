@@ -6,6 +6,10 @@ module.exports = app => {
     router.post("/", orders.create);
   
     router.get("/", orders.findAll);
+    router.get("/SO", orders.findAllSO);
+    router.get("/SOI", orders.findAllSOI);
+    router.get("/query", orders.query);
+    router.get("/queryproduction", orders.queryproduction);
 
     router.get("/published", orders.findAllPackaged);
   
