@@ -10,7 +10,8 @@ exports.create = (req, res) => {
     status: req.body.status,
     comments: req.body.comments,
     designed: req.body.designed ? req.body.designed : false,
-    packaged: req.body.packaged ? req.body.packaged : false
+    packaged: req.body.packaged ? req.body.packaged : false,
+    item_id: req.body.item_id
   };
 
   Order.create(order)

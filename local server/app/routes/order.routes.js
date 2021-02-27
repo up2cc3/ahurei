@@ -9,7 +9,7 @@ module.exports = app => {
     router.get("/SO", orders.findAllSO);
     router.get("/SOI", orders.findAllSOI);
     router.get("/query", orders.query);
-    router.get("/queryproduction", orders.queryproduction);
+    router.get("/production", orders.queryproduction);
 
     router.get("/published", orders.findAllPackaged);
   
